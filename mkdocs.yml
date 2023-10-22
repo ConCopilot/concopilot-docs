@@ -1,0 +1,27 @@
+site_name: ConCopilot
+site_url: https://concopilot.org
+copyright: 2023, concopilot.org
+theme: readthedocs
+
+nav:
+  #- Home: index.md
+  - INTRODUCTION:
+    - introduction/index.md
+    - Concepts: introduction/concepts.md
+    - General Guide: introduction/general_guide.md
+  - FRAMEWORK DOCS:
+    - framework_docs/index.md
+    - Copilot: framework_docs/copilot.md
+    - Plugin: framework_docs/plugin.md
+    - Special Plugins: framework_docs/special_plugins.md
+    - Message: framework_docs/message.md
+    - Resource: framework_docs/resource.md
+  - BUILD & DEPLOY:
+    - build_&_deploy/index.md
+    - The `conpack` CLI: build_&_deploy/conpack.md
+    - The `run` command: build_&_deploy/run.md
+    - Apply a Group ID: build_&_deploy/group_id.md
+
+plugins:
+  - search
+  - section-index
