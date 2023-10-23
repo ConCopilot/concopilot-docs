@@ -2,7 +2,7 @@
 
 The figure below shows the high level framework of ConCopilot.
 
-![Main Framework](../../assets/main_framework.jpg)
+![Main Framework](../assets/main_framework.jpg)
 
 The `Copilot` interface is the boundary of an APP, which takes inputs, does user interaction, and finally gives outputs.
 
