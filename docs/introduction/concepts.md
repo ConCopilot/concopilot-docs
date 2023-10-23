@@ -41,6 +41,40 @@ Generally, its meaning is similar to "Plugin" (since everything is a Plugin),
 but it is more about an engineering concept rather than a ConCopilot framework concept.
 Its specific meaning might vary slightly according to different contexts.
 
+### Group Id and Artifact Id
+
+We use the same concepts of these two identifiers as Maven.
+
+A "group_id" identifies an organization, a company, a community, or a person.
+It is typically composed by a reversed domain owned by a group.
+It separates components developed by different groups to eliminate the component conflict between groups.
+Developers should apply access to their group ids.
+See [here](../build_&_deploy/group_id.md) for details.
+
+An "artifact_id" is the name of a component.
+It usually represents the functionality of the component, and can be any arbitrary string.
+An "artifact_id" uniquely identifies a component in a group (under a "group_id").
+So please make sure different projects in the same group use different "artifact_id"s.
+
+### About the Version
+
+The format of version is `(\d+).(\d+).(\d+)(-any-string)?(-SNAPSHOT)?`, e.g., "1.0.21-linux-SNAPSHOT", "2.3.4".
+
+The first 3 digits parts are common typical version number,
+while the tailing "-SNAPSHOT" means it will be deployed to the snapshot repository during deployment for component testing.
+
+We provide two repositories, a snapshot one, and a release one, just like the Maven.
+Components without the "-SNAPSHOT" identifier will be deployed into the release repository, and are not allowed to be modified or redeployed.
+
+If you want to test your component in a full stack, you can add the "-SNAPSHOT" identifier at the tail of your component version,
+so that it will be deployed to the snapshot repository, and you can redeploy it later after some modifications.
+
+Please note that components deployed into the snapshot repository will be removed regularly,
+thus make sure to remove the "-SNAPSHOT" identifier after testing and deploy it again to the release repository.
+
+You can add any string after the version number to convey any information you like.
+But make sure the "-SNAPSHOT" identifier, if exists, always appears at the end of the version.
+
 ## Plugin
 
 This is one of the most important concept in ConCopilot, because ConCopilot is **_Based on Plugins_**.
