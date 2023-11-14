@@ -22,7 +22,7 @@ Then, a proof of the domain ownership should be provided.
 People applying an **organization group_id** must create a TXT record contains exactly the ticket ID to prove the ownership of their domain.
 This is also the same with the Maven repository.
 Check [this](https://central.sonatype.org/faq/how-to-set-txt-record/) for detail,
-but remember use the ConCopilot ticket ID, not the "OSSRH" one,
+but remember to use the ConCopilot ticket ID, not the "OSSRH" one,
 you don't need to register a sonatype account because you are not going to deploy a Java package.
 
 People applying a **personal group_id** only need to create a temporary, public repository with the name of the ticket created to register the group_id.

@@ -347,7 +347,7 @@ Remember to implement its `command` method which receives a command name string 
 The `command_name` makes it possible for a plugin to provide multiple commands,
 such as a disk plugin provides both the "read" and "write" command.
 
-### The `info` and `commands` section in "config.yaml"
+### The `info` and `commands` sections in the "config.yaml"
 
 These two sections are required for a Plugin's "config.yaml".
 Below is the detailed description for them:
@@ -430,14 +430,13 @@ version: <interactor_version>
 config:
   resources:
     -
-      group_id: <a_db_connection_group_id>
-      artifact_id: <a_db_connection_artifact_id>
-      version: <a_db_connection_version>
-      # ...
+      type: <resource_type>
+      id: default
+      # name: null
       config:
-        # the DB connection configs
-    -
-      # other resources
+        # the resource configs
+    # -
+    #   another resource
 ```
 
 Users can access those resources by the plugin's `get_resource` method, or `resources`, `resource_id_map`, `resource_name_map`, and `resource_type_map` attributes.
