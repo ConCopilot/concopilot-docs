@@ -62,7 +62,7 @@ Source code: [interactor.py](https://github.com/ConCopilot/concopilot/blob/main/
 <br>
 Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/main/config/interactor/config.yaml)
 <br>
-Implement example: [AutoInteractor](https://github.com/ConCopilot/concopilot/tree/main/concopilot_examples/interactor)
+Implement example: [AutoInteractor](https://github.com/ConCopilot/concopilot/tree/main/concopilot_examples/interactor/auto)
 
 ### Special methods
 
@@ -120,7 +120,7 @@ Implement example: [CmdUserInterface](https://github.com/ConCopilot/concopilot/t
 
     Send a message to the user.
 
-- `def on_user_msg(self, msg: Message) -> Message`
+- `def on_user_msg(self, msg: Message) -> Optional[Message]`
 
     Send a message to the user and wait the user response.
 
@@ -133,6 +133,12 @@ Implement example: [CmdUserInterface](https://github.com/ConCopilot/concopilot/t
     Retrieve a new user message if any.
     <br>
     Use this with `has_user_msg` for async user interaction pipelines.
+
+- `def wait_user_msg(self) -> Optional[Message]`
+
+    Wait a new user message if until there is one.
+    <br>
+    Use this for async user interaction pipelines.
 
 ## Message Manager
 

@@ -95,7 +95,7 @@ On the other hand, any component that is supposed to be used as a supporting too
 
 ###### `resources` property
 
-Returns the plugin resource list.
+Returns the plugin resource list (`List[Resource]`).
 
 ###### `resource_id_map` property
 

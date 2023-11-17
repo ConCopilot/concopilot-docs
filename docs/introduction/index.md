@@ -75,7 +75,7 @@ conpack run
 
 ##### Quick example
 
-1. Download this simplified Auto-GPT like [example copilot](https://github.com/ConCopilot/concopilot/tree/main/concopilot_examples/config.yaml).
+1. Download this simplified Auto-GPT like [example copilot](https://github.com/ConCopilot/concopilot/tree/main/concopilot_examples/copilot/auto/.config/config.yaml).
 2. Run it:
 
 ```shell

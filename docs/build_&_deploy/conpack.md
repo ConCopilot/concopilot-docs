@@ -11,6 +11,11 @@ conpack build
             [--src-folder=<src_folder>] # The source folder (where the ".config" folder exists), default to current directory
             [--config-file=<config-file>] # The config.yaml file path
         ]
+        [--skip-setup]
+        [--pip-params=<pip_params>] # Additional parameters to be passed to pip when installing a python package
+        [--add-current-folder-to-path] # Whether add the current folder to path
+        [--add-working-directory-to-path] # Whether add the working directory to path
+        [--add-src-folder-to-path] # Whether add the source folder to path
         [*argv]
 ```
 
@@ -31,7 +36,11 @@ conpack run
             [--src-folder=<src_folder>] # The source folder (where the ".config" folder exists), default to current directory
             [--config-file=<config-file>] # The config.yaml file path
         ]
-        [--skip-build]
+        [--skip-setup]
+        [--pip-params=<pip_params>] # Additional parameters to be passed to pip when installing a python package
+        [--add-current-folder-to-path] # Whether add the current folder to path
+        [--add-working-directory-to-path] # Whether add the working directory to path
+        [--add-src-folder-to-path] # Whether add the source folder to path
         [*argv]
 ```
 
@@ -46,8 +55,12 @@ conpack install
         [--settings=<settings>] # The `conpack` config setting file path, absent for default
         [--working-directory=<working_directory>] # The working directory (where to place the ".runtime" folder), default to current directory
         [--src-folder=<src_folder>] # The source folder (where the ".config" folder exists), default to current directory
-        [--skip-build]
+        [--skip-setup]
+        [--pip-params=<pip_params>] # Additional parameters to be passed to pip when installing a python package
         [--recursive] # check all sub-folder of the <src_folder> for possible config files
+        [--add-current-folder-to-path] # Whether add the current folder to path
+        [--add-working-directory-to-path] # Whether add the working directory to path
+        [--add-src-folder-to-path] # Whether add the source folder to path
         [*argv]
 ```
 
@@ -62,9 +75,13 @@ conpack deploy
         [--settings=<settings>] # The `conpack` config setting file path, absent for default
         [--working-directory=<working_directory>] # The working directory (where to place the ".runtime" folder), default to current directory
         [--src-folder=<src_folder>] # The source folder (where the ".config" folder exists), default to current directory
-        [--skip-build]
+        [--skip-setup]
+        [--pip-params=<pip_params>] # Additional parameters to be passed to pip when installing a python package
         [--recursive] # check all sub-folder of the <src_folder> for possible config files
         [--repo-user-name=<repo_user_name>] [--repo-user-pwd=<repo_user_pwd>] [--gpg-passphrase=<gpg_passphrase>] [--gnupg-home=<gnupg_home>]
+        [--add-current-folder-to-path] # Whether add the current folder to path
+        [--add-working-directory-to-path] # Whether add the working directory to path
+        [--add-src-folder-to-path] # Whether add the source folder to path
         [*argv]
 ```
 

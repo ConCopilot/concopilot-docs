@@ -160,4 +160,4 @@ Choose suitable component from our [website](https://concopilot.org) for your sp
 and use them to modify the Copilot "config.yaml",
 then use our `conpack` tool to run the Copilot.
 
-Here is a runnable "[config.yaml](https://github.com/ConCopilot/concopilot/blob/main/concopilot_examples/config.yaml)" example.
+Here is a runnable "[config.yaml](https://github.com/ConCopilot/concopilot/blob/main/concopilot_examples/copilot/auto/.config/config.yaml)" example.

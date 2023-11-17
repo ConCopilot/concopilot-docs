@@ -17,7 +17,7 @@ For example, `class_dict['key']` is equivalent to `class_dict.key`.
 
 [TOC]
 
-## Copilot
+## Copilot/Agent
 
 We define a Copilot as a specific LLM based worker that can automatically accomplish tasks in some area.
 
@@ -29,7 +29,16 @@ This is a very **GENERAL** concept so that a specific copilot can be literally a
 4. interact with human
 
 Under this definition, everything that helps human works can be a copilot.
-GitHub Copilot, Office Copilot, AI Assistant like Siri, and even devices like robots and drones can be copilots. 
+GitHub Copilot, Office Copilot, AI Assistant like Siri, and even devices like robots and drones can be copilots.
+
+The concept of Agent is very similar to the concept of Copilot,
+they are mixed-used in most cases and the community uses Agent more.
+
+In our view, we think "Copilot" emphasize more on the application and business,
+while "Agent" emphasize more about the LLM.
+This is the reason we use "Copilot" more than "Agent".
+ConCopilot focus more on how to help develop a business/task based application.
+But it is OK for you to mix-using these two concepts.
 
 ## Component
 
