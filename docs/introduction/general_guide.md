@@ -131,7 +131,9 @@ Message:
   content:
     command: plugin command
     param: plugin parameter dict
-    content: string content of the action
+    data: plugin response
+    text: text message content
+    assets: transfer assets directly if necessary, not recommended, try "context.assets" first
   time: a string indicates the message time
 ```
 
@@ -149,8 +151,16 @@ Thus, the contracts below are necessary:
 2. for `message.content.command` and `message.content.param`
    These two fields are reserved for plugin calls.
    `command` is the plugin command name and `param` is the related parameters.
-3. for `message.content.content`
+3. for `message.content.data`
+   This is used for plugin response.
+4. for `message.content.text`
    This is used for message strings, such as a message to the user.
+5. for `message.content.assets`
+   This is used for transferring assets directly if necessary.
+   But it is not recommended,
+   because an asset is usually heavy and need to be exposed to various components in the pipeline,
+   and all components can access the global assets `dict` via `self.context.assets`.
+   So try this first.
 
 All of the above strings are case-sensitive.
 

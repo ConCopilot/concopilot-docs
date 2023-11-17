@@ -7,9 +7,14 @@ This guide provides an overview about how to develop a plugin.
 
 [TOC]
 
+## Examples
+
+You can refer [these examples](https://github.com/ConCopilot/concopilot/blob/main/concopilot_examples/plugin) during developing.
+This folder contains several developed plugins, click into sub-folders for details.
+
 ## Create a package
 
-As mentioned in the [General Guide](../introduction/general_guide.md),
+As mentioned in the [General Guide](../introduction/general_guide.md#component-package-structure),
 you can add as many component packages as you want in your project.
 We will use the simplest structure as shown below in this example.
 
@@ -27,10 +32,10 @@ Notes:
 
 1. The ".config" folder.
     1. Any file in this folder will be pushed to our component repository during deployment.
-    2. A "config.yaml" containing all information about this component is **REQUIRED**. A full template can be found [here](https://github.com/ConCopilot/concopilot/blob/main/config/plugin/config.yaml)
+    2. A "config.yaml" containing all information about this component is **REQUIRED**. A full template can be found [here](https://github.com/ConCopilot/concopilot/blob/main/config/plugin/config.yaml).
     3. A "readme.md" to describe this component is **recommended**.
     4. Do **NOT** put anything too large (like a model weights file) here.
-2. The "\_\_init\_\_.py": expose a "constructor" method like below to make ConCopilot is able to construct your plugin.
+2. The "\_\_init\_\_.py": expose a "constructor" method like below to make ConCopilot able to construct your plugin.
 
 ```python
 from typing import Dict
@@ -77,7 +82,7 @@ But you don't need to use it because the `AbstractPlugin` has dealt with most jo
 Instead, you can directly use `self.config` to access the data anywhere in the class.
 
 The `config` section in the "config.yaml" is a good place to store parameters that are supposed to be modified in different tasks.
-Because they can be overriden by outer scope such like a copilot's "config.yaml".
+Because they can be overriden by outer scopes such like a copilot's "config.yaml".
 Use `self.config.config` to access the data.
 
 ### The `info` and `commands` sections in the "config.yaml", and the plugin `command` method
@@ -153,8 +158,8 @@ and each command should receive its `param` and return its "response" with a for
 
 ### Using Resources
 
-Please note that do **NOT** do any resource allocation,
-including but not limited to model loading, DB connection, HTTP pools creation, memory allocation, etc., in the `__init__` method.
+Please note that do **NOT** do any resource allocation in the `__init__` method,
+including but not limited to model loading, DB connection, HTTP pools creation, memory allocation, etc.
 Instead, please [make Resource components](./develop_resource.md) to do these stuffs and add them to the `config.resources` section in your plugin's "config.yaml" like below,
 and ConCopilot will do the initialization and finalization for you.
 
@@ -179,8 +184,14 @@ config:
     #   another resource
 ```
 
+This mechanism has a great advantage for cross-component resources sharing.
+For example, some plugins may want to use the LLM that mainly initialized for the cerebrum.
+Another example is that one HTTP client can be shared for all plugins that need to request URLs.
+Learn more about the resource initialization life cycle from the [Copilot Framework execution steps](../framework_docs/copilot.md#framework).
+You can also code your own copilot to modify these steps if the general-purposed one cannot match your work.
+
 You can access your resources by using any of the `resources`, `resource_id_map`, `resource_name_map`, `resource_type_map` properties,
-or the `get_resource` method.
+or the `get_resource` method in your plugin scope.
 Learn more in [Plugin Resources](../framework_docs/plugin.md#plugin-resources)
 
 Resources created by other method may result memory leak or other negative effects due to incorrect initialization and finalization.
@@ -207,7 +218,7 @@ class YourPlugin(AbstractPlugin):
 
 ### Fill the `setup` section in the "config.yaml"
 
-This section controls how the plugin to be loaded in a copilot or agent.
+This section controls how the plugin to be loaded into a copilot or agent.
 
 It provides two parts of information:
 1. The pip packages the plugin depends on
@@ -237,6 +248,21 @@ plugin=component.create_component({
     'artifact_id': '<artifact_id>',
     'version': '<version>'
 })
+```
+
+We recommend to use the `ClassDict` to create mappings in ConCopilot,
+as shown below,
+because it allows the class style field accessing (`obj.attr`).
+
+```python
+from concopilot.util.initializer import component
+from concopilot.util import ClassDict
+
+plugin=component.create_component(ClassDict(
+    group_id='<group_id>',
+    artifact_id='<artifact_id>',
+    version='<version>'
+))
 ```
 
 If their is a section in your plugin's config contains the sub-components information,
@@ -273,19 +299,184 @@ class YourPlugin(AbstractPlugin):
         a_component=component.create_component(self.config.config.a_component)
         # ...
 
-    def command(self, command_name: str, param: Dict, **kwargs) -> Dict:
-        # ...
+    # ...
 ```
 
 ## Test your plugin
 
+Generally, there are 3 phase of testing stages in a strict developing pipeline:
+
+1. In-project: testing your component in your project.
+2. Local: testing your component in your local environment (with or without packaged python codes).
+3. Snapshot: testing your component with remote snapshot repository (with packaged python codes and deployed component snapshots).
+
+It is OK but not recommend to skip any of these 3 stages.
+This step-by-step testing is necessary to ensure a high quality component delivery.
+
 ### In-project test
+
+You can build/run you developing component in the project developing environment.
+Run below command in your project root directory to do this.
+
+```shell
+conpack [build/run]
+        --config-file=<config-file> # Your component config.yaml file path
+        --add-current-folder-to-path # Add the current folder to path, if absent the python interpreter may not be able to load your project code.
+        [--working-directory=<working_directory>] # The working directory (where to place the ".runtime" folder), default to current directory
+        [--skip-setup] # add this if you don't need to install any pip package mentioned in the "setup.pip" section in the "config.yaml"
+        [--pip-params=<pip_params>] # Additional parameters to be passed to pip when installing a python package
+```
+
+The `conpack build` command will exit after successfully initialized your component,
+while the `conpack run` command will run your component.
+But please note that only a Copilot can be run, run other component will raise an error.
+
+You can also run this command in a python script and use the component instance for further test:
+
+```python
+from concopilot import conpack
+
+plugin=conpack(['build', '--config-file=<config-file>', '--skip-setup', '--add-current-folder-to-path'])
+
+plugin.some_method(...)
+```
 
 ### Test in Local Repository
 
+You can do very limit things in the in-project test.
+A higher stage is to test your component in a well-built Copilot to evaluate its performance.
+
+The only work to do is to install your component into your local repository.
+Run below command in your project root directory to do this.
+
+```shell
+conpack install
+        --src-folder=. # The source folder (where the ".config" folder exists), default to current directory
+        [--recursive] # check all sub-folder of the <src_folder> for possible config files
+        [--skip-setup] # add this if you don't want to build your component
+        [--add-current-folder-to-path] # Add the current folder to path if you want to build your component
+        [--pip-params=<pip_params>] # Additional parameters to be passed to pip when installing a python package
+```
+
+After this step, you will find your components installed into your local repository located at `~/.concopilot/repository`,
+with the paths consisted of their `group_id`, `artifact_id`, and `version`.
+
+Now, you can use your plugin in any copilot by adding your plugin into the copilot's plugin list.
+For example, here is the "[config.yaml](https://github.com/ConCopilot/concopilot/blob/main/concopilot_examples/config_auto.yaml)" of an AutoGPT like copilot/agent.
+Download this file,
+and you can add your plugin by adding your plugin's `group_id`, `artifact_id`,
+and `version` into the `plugin_manager.config.plugins` section in the file. 
+
+```yaml
+# ...
+
+  plugin_manager:
+    group_id: org.concopilot.basic.plugin.manager
+    artifact_id: basic-plugin-manager
+    version: 0.0.0
+    config:
+      plugin_prompt_generator:
+        group_id: org.concopilot.example
+        artifact_id: lm-plugin-prompt-gen
+        version: 0.0.0
+      plugins:
+        -
+          #...
+        -
+          group_id: <your_plugin_group_id>
+          artifact_id: <your_plugin_artifact_id>
+          version: <your_plugin_version>
+```
+
+Now, run the `conpack run` command to see the performance.
+
+```shell
+conpack run
+        --config-file=<your_downloaded_file_path>
+        --add-current-folder-to-path
+        [--skip-setup]
+        [--working-directory=<your_working_directory>]
+```
+
+You can also try other copilot or write your own to test your plugins or other components.
+
+You can choose to package your python code (.whl) in this testing stage.
+Read [this](https://packaging.python.org/en/latest/tutorials/packaging-projects/) and [this](https://setuptools.pypa.io/en/latest/userguide/quickstart.html) about how to package python project.
+
+After you installed the component into your local repository and installed your pip whl into another venv,
+you can build/run your component by substitute the `--config-file` parameter to your component `group_id`, `artifact_id`, and `version` like below:
+
+```shell
+conpack build
+        --group-id=<group-id> --artifact-id=<artifact-id> --version=<version>
+        [--skip-setup]
+```
+
+You also do not need to add the `--add-current-folder-to-path` parameter now,
+because your codes have been already installed into your venv python "site-packages" folder.
+
+One thing to be emphasized,
+remember to remove your component folder under the ".runtime" folder,
+if you re-installed your component and want to use the new version.
+
+ConCopilot allows users to modify configs under the ".runtime" folder for special tasks,
+thus ConCopilot will never override files under this folder.
+
 ### Snapshot Deployment
+
+Theoretically, you can test your package anywhere on your local machine after you installed it into your local repository,
+but it is not able to test it in any other places.
+This would be a big problem in some cases,
+especially you are developing a big project and are cooperating with others.
+
+It is obvious that you need to deliver both your components and your pip whl to your teammates.
+It is easy to send you whl file to them, but how about your components?
+
+Don't worry. You can deploy a snapshot version of your component so that others can use it just as it has been released.
+(See [this](../introduction/concepts.md#about-the-version) for more information about component versions.)
+The only difference between a snapshot version and a formal release version is that a snapshot component can be re-deployed.
+So that you can modify your components again and again before the formal release.
+If you have work with Maven, you will feel very familiar with this.
+
+All you need to do is to add a "-SNAPSHOT" suffix to you component version, and deploy it using the `conpack deploy` command.
+
+```shell
+conpack deploy
+        --src-folder=<src_folder> # The source folder (where the ".config" folder exists), default to current directory
+        --repo-user-name=<repo_user_name> --repo-user-pwd=<repo_user_pwd>
+        [--recursive] # check all sub-folder of the <src_folder> for possible config files
+        [--gpg-passphrase=<gpg_passphrase>] [--gnupg-home=<gnupg_home>]
+        [--skip-setup] # add this if you don't want to build your component
+        [--pip-params=<pip_params>] # Additional parameters to be passed to pip when installing a python package
+        [--add-current-folder-to-path] # Whether add the current folder to path
+        [--add-working-directory-to-path] # Whether add the working directory to path
+        [--add-src-folder-to-path] # Whether add the source folder to path
+```
+
+Now, your colleagues and teammates can directly access your component by their `group_id`, `artifact_id`, and `version`.
+You are also able to modify and re-deploy your component during the testing.
+
+To request an eligibility to deploy your component, for both snapshot and release versions,
+you need to register an account on [concopilot.org](https://concopilot.org),
+and apply the accessibility of a `group_id`.
+See [this](../build_&_deploy/group_id.md) for the details.
+
+Like the previous section,
+ask your teammates to remove the component folders under both their local repository and their ".runtime" folder to use the new version.
+
+One last thing to be emphasized,
+the snapshot deployments will be regularly removed from the repository.
+If you found it has been removed, just re-deploy it if necessary.
 
 ## Release your plugin
 
-### Release Deployment
+For a release deployment,
+you should release your python package first.
+See [here](https://packaging.python.org/en/latest/tutorials/packaging-projects/) and [here](https://setuptools.pypa.io/en/latest/userguide/quickstart.html) for details.
 
+Then, like the snapshot deployment, you can deploy your release version by using the same `conpack deploy` command.
+Please register your account and applied the accessibility of your `group_id` first,
+and remember to remove the "-SNAPSHOT" suffix before you release.
+Please also note that you are not allowed to re-deploy a released component.
+
+Now, others can find your components on our [website](https://concopilot.org) and access them by the (`group_id`, `artifact_id`, `version`) tuples.
