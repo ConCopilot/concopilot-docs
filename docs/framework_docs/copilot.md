@@ -82,7 +82,7 @@ artifact_id: basic-copilot
 
 ### Framework
 
-[Source code](https://github.com/ConCopilot/concopilot/tree/main/concopilot/basic/copilot)
+[Source code](https://github.com/ConCopilot/concopilot/tree/v0.0.0/concopilot/basic/copilot)
 
 When an instance of this Copilot is created and run, it executes below tasks step by step:
 
@@ -160,4 +160,4 @@ Choose suitable component from our [website](https://concopilot.org) for your sp
 and use them to modify the Copilot "config.yaml",
 then use our `conpack` tool to run the Copilot.
 
-Here is a runnable "[config.yaml](https://github.com/ConCopilot/concopilot/blob/main/concopilot_examples/config.yaml)" example.
+Here is a runnable "[config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.0/concopilot_examples/config.yaml)" example.

@@ -197,7 +197,7 @@ config:
   # optional, plugin config
 ```
 
-Templates of the "config.yaml" files for each component can be found in out [git](https://github.com/ConCopilot/concopilot/tree/main/config).
+Templates of the "config.yaml" files for each component can be found in out [git](https://github.com/ConCopilot/concopilot/tree/v0.0.0/config).
 We only give the constraints here.
 
 1. The `type` field indicates the plugin type which can be any arbitrary string.
@@ -456,7 +456,7 @@ _Special Plugins_ "config.yaml" are also slightly different to the Plugin's by t
 and the `info` and `commands` sections, depending on what component it is.
 
 We provided template "config.yaml" for each ConCopilot predefined components,
-see the [ConCopilot Component Config Templates](https://github.com/ConCopilot/concopilot/tree/main/config) on our GitHub.
+see the [ConCopilot Component Config Templates](https://github.com/ConCopilot/concopilot/tree/v0.0.0/config) on our GitHub.
 
 See also the [Framework Docs](../framework_docs/index.md) for details.
 
