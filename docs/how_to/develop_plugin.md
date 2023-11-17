@@ -362,7 +362,7 @@ After this step, you will find your components installed into your local reposit
 with the paths consisted of their `group_id`, `artifact_id`, and `version`.
 
 Now, you can use your plugin in any copilot by adding your plugin into the copilot's plugin list.
-For example, here is the "[config.yaml](https://github.com/ConCopilot/concopilot/blob/main/concopilot_examples/config_auto.yaml)" of an AutoGPT like copilot/agent.
+For example, here is the "[config.yaml](https://github.com/ConCopilot/concopilot/blob/main/concopilot_examples/copilot/auto/.config/config.yaml)" of an AutoGPT like copilot/agent.
 Download this file,
 and you can add your plugin by adding your plugin's `group_id`, `artifact_id`,
 and `version` into the `plugin_manager.config.plugins` section in the file. 
