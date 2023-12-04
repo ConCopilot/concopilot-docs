@@ -49,7 +49,7 @@ Please note that ConCopilot do **NOT** take the responsibility of any malicious 
 
 ## Example
 
-See example source codes and configs [here](https://github.com/ConCopilot/concopilot/tree/main/concopilot_examples).
+See example source codes and configs [here](https://github.com/ConCopilot/concopilot-examples).
 
 ### Installation
 
@@ -75,7 +75,7 @@ conpack run
 
 ##### Quick example
 
-1. Download this simplified Auto-GPT like [example copilot](https://github.com/ConCopilot/concopilot/tree/main/concopilot_examples/copilot/auto/.config/config.yaml).
+1. Download this simplified Auto-GPT like [example copilot](https://github.com/ConCopilot/concopilot-examples/tree/main/concopilot_examples/copilot/auto/.config/config.yaml).
 2. Run it:
 
 ```shell

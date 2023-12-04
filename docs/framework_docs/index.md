@@ -32,4 +32,4 @@ All interfaces described above are implementd the `Plugin` interface and are reg
 
 All components in ConCopilot can interact with each other by using `Messages` which maximum the flexibility of the framework.
 We also do not contradict exposing the lower level component methods for deterministic logics.
-See our [examples](https://github.com/ConCopilot/concopilot/tree/main/concopilot_examples) for details.
+See our [examples](https://github.com/ConCopilot/concopilot-examples) for details.
