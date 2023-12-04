@@ -191,4 +191,4 @@ Developers only need to do 2 things in most cases:
     This method will control the core logics of your plugin,
     so you need to implement it with your own logic.
 
-See more examples [here](https://github.com/ConCopilot/concopilot/tree/main/concopilot_examples/plugin). 
+See more examples [here](https://github.com/ConCopilot/concopilot-examples/tree/main/concopilot_examples/plugin). 
