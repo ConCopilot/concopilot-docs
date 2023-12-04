@@ -1,6 +1,6 @@
 # Message
 
-Source code: [message.py](https://github.com/ConCopilot/concopilot/blob/v0.0.0/concopilot/framework/message/message.py)
+Source code: [message.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/message/message.py)
 
 A message can be constructed using the `__init__` method by passing the `sender`, `receiver`, `content`, and `time`.
 

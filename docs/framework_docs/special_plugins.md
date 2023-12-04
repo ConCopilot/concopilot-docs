@@ -11,11 +11,11 @@ This doc list their special methods only.
 
 ## Cerebrum
 
-Source code: [cerebrum.py](https://github.com/ConCopilot/concopilot/blob/v0.0.0/concopilot/framework/cerebrum/cerebrum.py)
+Source code: [cerebrum.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/cerebrum/cerebrum.py)
 <br>
-Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.0/config/cerebrum/config.yaml)
+Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.1/config/cerebrum/config.yaml)
 <br>
-Implement example: [OpenAICerebrum](https://github.com/ConCopilot/concopilot/tree/v0.0.0/concopilot_examples/cerebrum/openaicerebrum)
+Implement example: [OpenAICerebrum](https://github.com/ConCopilot/concopilot/tree/v0.0.1/concopilot_examples/cerebrum/openaicerebrum)
 
 ### Special methods
 
@@ -58,11 +58,11 @@ This class implemented the cerebrum `role` which will be initialized from the `c
 
 ## Interactor
 
-Source code: [interactor.py](https://github.com/ConCopilot/concopilot/blob/v0.0.0/concopilot/framework/interactor/interactor.py)
+Source code: [interactor.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/interactor/interactor.py)
 <br>
-Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.0/config/interactor/config.yaml)
+Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.1/config/interactor/config.yaml)
 <br>
-Implement example: [AutoInteractor](https://github.com/ConCopilot/concopilot/tree/v0.0.0/concopilot_examples/interactor)
+Implement example: [AutoInteractor](https://github.com/ConCopilot/concopilot/tree/v0.0.1/concopilot_examples/interactor/auto)
 
 ### Special methods
 
@@ -102,11 +102,11 @@ The `setup_prompts` and the `setup_plugins` methods are also defined to call the
 
 ## User Interface
 
-Source code: [interface.py](https://github.com/ConCopilot/concopilot/blob/v0.0.0/concopilot/framework/interface/interface.py)
+Source code: [interface.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/interface/interface.py)
 <br>
-Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.0/config/interface/config.yaml)
+Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.1/config/interface/config.yaml)
 <br>
-Implement example: [CmdUserInterface](https://github.com/ConCopilot/concopilot/tree/v0.0.0/concopilot/basic/interface/cmd)
+Implement example: [CmdUserInterface](https://github.com/ConCopilot/concopilot/tree/v0.0.1/concopilot/basic/interface/cmd)
 
 ### Special methods
 
@@ -120,7 +120,7 @@ Implement example: [CmdUserInterface](https://github.com/ConCopilot/concopilot/t
 
     Send a message to the user.
 
-- `def on_user_msg(self, msg: Message) -> Message`
+- `def on_user_msg(self, msg: Message) -> Optional[Message]`
 
     Send a message to the user and wait the user response.
 
@@ -134,13 +134,19 @@ Implement example: [CmdUserInterface](https://github.com/ConCopilot/concopilot/t
     <br>
     Use this with `has_user_msg` for async user interaction pipelines.
 
+- `def wait_user_msg(self) -> Optional[Message]`
+
+    Wait a new user message if until there is one.
+    <br>
+    Use this for async user interaction pipelines.
+
 ## Message Manager
 
-Source code: [manager.py](https://github.com/ConCopilot/concopilot/blob/v0.0.0/concopilot/framework/message/manager.py)
+Source code: [manager.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/message/manager.py)
 <br>
-Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.0/config/message/manager/config.yaml)
+Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.1/config/message/manager/config.yaml)
 <br>
-Implement example: [BasicJsonMessageManager](https://github.com/ConCopilot/concopilot/tree/v0.0.0/concopilot/basic/message/manager/jsonmanager)
+Implement example: [BasicJsonMessageManager](https://github.com/ConCopilot/concopilot/tree/v0.0.1/concopilot/basic/message/manager/jsonmanager)
 
 ### Special methods
 
@@ -158,11 +164,11 @@ Implement example: [BasicJsonMessageManager](https://github.com/ConCopilot/conco
 
 ## Plugin Manager
 
-Source code: [manager.py](https://github.com/ConCopilot/concopilot/blob/v0.0.0/concopilot/framework/plugin/manager.py)
+Source code: [manager.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/plugin/manager.py)
 <br>
-Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.0/config/plugin/manager/config.yaml)
+Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.1/config/plugin/manager/config.yaml)
 <br>
-Implement example: [BasicPluginManager](https://github.com/ConCopilot/concopilot/tree/v0.0.0/concopilot/basic/plugin/manager)
+Implement example: [BasicPluginManager](https://github.com/ConCopilot/concopilot/tree/v0.0.1/concopilot/basic/plugin/manager)
 
 ### Special methods
 
@@ -217,11 +223,11 @@ This class implemented all method in `PluginManager` and can be directly used.
 
 ## Plugin Prompt Generator
 
-Source code: [promptgenerator.py](https://github.com/ConCopilot/concopilot/blob/v0.0.0/concopilot/framework/plugin/promptgenerator.py)
+Source code: [promptgenerator.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/plugin/promptgenerator.py)
 <br>
-Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.0/config/plugin/promptgenerator/config.yaml) 
+Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.1/config/plugin/promptgenerator/config.yaml) 
 <br>
-Implement example: [LanguageModelPluginPromptGenerator](https://github.com/ConCopilot/concopilot/tree/v0.0.0/concopilot_examples/plugin/promptgenerator)
+Implement example: [LanguageModelPluginPromptGenerator](https://github.com/ConCopilot/concopilot/tree/v0.0.1/concopilot_examples/plugin/promptgenerator)
 
 ### Special methods
 
@@ -237,11 +243,11 @@ Implement example: [LanguageModelPluginPromptGenerator](https://github.com/ConCo
 
 ## Resource Manager
 
-Source code: [manager.py](https://github.com/ConCopilot/concopilot/blob/v0.0.0/concopilot/framework/resource/manager.py)
+Source code: [manager.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/resource/manager.py)
 <br>
-Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.0/config/resource/manager/config.yaml)
+Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.1/config/resource/manager/config.yaml)
 <br>
-Implement example: [BasicResourceManager](https://github.com/ConCopilot/concopilot/tree/v0.0.0/concopilot/basic/resource/manager)
+Implement example: [BasicResourceManager](https://github.com/ConCopilot/concopilot/tree/v0.0.1/concopilot/basic/resource/manager)
 
 ### Special methods
 
@@ -273,11 +279,11 @@ This class implemented all method in `ResourceManager` and can be directly used.
 
 ## Storage
 
-Source code: [storage.py](https://github.com/ConCopilot/concopilot/blob/v0.0.0/concopilot/framework/storage/storage.py)
+Source code: [storage.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/storage/storage.py)
 <br>
-Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.0/config/storage/config.yaml)
+Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.1/config/storage/config.yaml)
 <br>
-Implement example: [DiskStorage](https://github.com/ConCopilot/concopilot/tree/v0.0.0/concopilot/basic/storage/disk)
+Implement example: [DiskStorage](https://github.com/ConCopilot/concopilot/tree/v0.0.1/concopilot/basic/storage/disk)
 
 ### Special methods
 

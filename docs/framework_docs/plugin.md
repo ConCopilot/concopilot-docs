@@ -6,9 +6,9 @@
 
 ### Methods of the `Plugin` interface
 
-Source code: [plugin.py](https://github.com/ConCopilot/concopilot/blob/v0.0.0/concopilot/framework/plugin/plugin.py)
+Source code: [plugin.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/plugin/plugin.py)
 <br>
-Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.0/config/plugin/config.yaml)
+Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.1/config/plugin/config.yaml)
 
 The Plugin methods can be grouped into 3 parts: configuration, data & property, and interaction.
 
@@ -95,7 +95,7 @@ On the other hand, any component that is supposed to be used as a supporting too
 
 ###### `resources` property
 
-Returns the plugin resource list.
+Returns the plugin resource list (`List[Resource]`).
 
 ###### `resource_id_map` property
 
@@ -175,7 +175,7 @@ Retrieve the first message this plugin is about to send or `None`.
 
 ## The `AbstractPlugin` class
 
-Source code: [plugin.py](https://github.com/ConCopilot/concopilot/blob/v0.0.0/concopilot/framework/plugin/plugin.py)
+Source code: [plugin.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/plugin/plugin.py)
 
 It looks very complex for the `Plugin` interface.
 Fortunately, ConCopilot has implemented most of the interface methods for common use.
@@ -191,4 +191,4 @@ Developers only need to do 2 things in most cases:
     This method will control the core logics of your plugin,
     so you need to implement it with your own logic.
 
-See more examples [here](https://github.com/ConCopilot/concopilot/tree/v0.0.0/concopilot_examples/plugin). 
+See more examples [here](https://github.com/ConCopilot/concopilot/tree/v0.0.1/concopilot_examples/plugin). 
