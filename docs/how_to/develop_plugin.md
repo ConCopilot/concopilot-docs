@@ -346,7 +346,7 @@ plugin.some_method(...)
 You can do very limit things in the in-project test.
 A higher stage is to test your component in a well-built Copilot to evaluate its performance.
 
-The only work to do is to install your component into your local repository.
+The only work to do is to install your component into your local repository (default to "~/.concopilot/repository").
 Run below command in your project root directory to do this.
 
 ```shell

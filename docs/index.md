@@ -8,6 +8,7 @@ ConCopilot defines standards and common interfaces that would be helpful to make
     - [Concepts](introduction/concepts.md)
     - [General Guide](introduction/general_guide.md)
 - [HOW TO](how_to/index.md):
+    - [Find Component Source Code](how_to/find_component_source_code.md)
     - [Develop a Plugin](how_to/develop_plugin.md)
     - [Develop a Resource](how_to/develop_resource.md)
     - [Develop a Model](how_to/develop_model.md)
