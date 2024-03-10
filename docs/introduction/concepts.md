@@ -147,7 +147,7 @@ This is defined as the common interface to deal with interactions with user.
 #### Message Manager
 
 This is defined to translate the LLM natural language text from the Cerebrum response (`InteractResponse` type) into structured data (generally a `Dict`),
-and encapsulate it with other information in the `InteractResponse` response into a `Message` for the main task pipeline.
+and encapsulate it with other information in the `InteractResponse` response into a `Message` list for the main task pipeline.
 
 The most popular form of this is to deserialize LLM json string into python `dict`.
 
@@ -188,10 +188,13 @@ They contain and transfer information and even some parts of working data betwee
 
 Each message contains
 
-1. the "sender" who sent the message out.
-2. the "receiver" who is going to receive the message.
-3. the "content" that contains what to be transferred, specifically, the command information for the receiver plugin to execute.
-4. the "time" that the message happened.
+1. a "sender" represents who sent the message out.
+2. a "receiver" represents who is going to receive the message.
+3. a "content_type" indicates what type and format the message content is, providing clues to interpret the "content".
+4. a "content" contains what to be delivered, specifically, the command information for the receiver plugin to execute.
+5. the "time" that the message happened.
+6. an optional "id" represents the message id.
+7. an optional "thrd_id" represents a message thread that this message belongs to.
 
 ## Resource
 
@@ -219,9 +222,15 @@ Any plugin can fully access those assets by access the context.
 
 An asset mainly contains these parts:
 
-1. type: an arbitrary string represents the asset type.
-2. id: the id of the asset.
-3. name: the name of the asset.
+1. asset_type: an arbitrary string represents the asset type.
+2. asset_id: the id of the asset.
+3. asset_name: the name of the asset.
 4. description: the description of the asset.
-5. content: any arbitrary string represents the content of this asset.
-6. data: any arbitrary data this asset contains.
+5. content_type: the asset content type.
+6. content: any arbitrary string represents the content of this asset.
+
+An asset can have an asset meta to carrying type information for its complex data.
+
+An asset and its subfields can be referenced by asset references.
+
+Learn more about Asset, AssetMeta, and AssetRef [here](../framework_docs/assets.md)

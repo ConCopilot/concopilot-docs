@@ -128,18 +128,16 @@ Message:
     role: the message receiver role
     id: the message receiver id
     name: the message receiver name
-  content:
-    command: plugin command
-    param: plugin parameter dict
-    data: plugin response
-    text: text message content
-    assets: transfer assets directly if necessary, not recommended, try "context.assets" first
+  content_type: the content type of the message content
+  content: the message content
   time: a string indicates the message time
+  id: an optional id of this message
+  thrd_id: an optional id for a message thread that this message belongs to.
 ```
 
-The meaning of the message content is natural: the `sender` sent the `content` to the `receiver` at the `time`.
+The meaning of the message content is natural: the `sender` sent the `content` within the format of `content_type` to the `receiver` at the `time`.
 
-We want components can understand messages sent to them without considering the sender.
+We want components can understand messages sent to them without considering the sender or the current task.
 Thus, the contracts below are necessary:
 
 1. for `message.sender.role` and `message.receiver.role`
@@ -148,21 +146,28 @@ Thus, the contracts below are necessary:
     3. must be "user" if the message sender/receiver is the user
     4. must be "system" if the message sender/receiver is the "system"
         (We use "system" role to transfer system messages such as "error" and "exit")
-2. for `message.content.command` and `message.content.param`
-   These two fields are reserved for plugin calls.
-   `command` is the plugin command name and `param` is the related parameters.
-3. for `message.content.data`
-   This is used for plugin response.
-4. for `message.content.text`
-   This is used for message strings, such as a message to the user.
-5. for `message.content.assets`
-   This is used for transferring assets directly if necessary.
-   But it is not recommended,
-   because an asset is usually heavy and need to be exposed to various components in the pipeline,
-   and all components can access the global assets `dict` via `self.context.assets`.
-   So try this first.
+2. for `content_type`
+    1. use Multipurpose Internet Mail Extensions type (MIME type) for common serialized `content` (e.g.: text/markdown)
+    2. set to "command" if the `content` is a plugin call command or response
+    3. set to `content` Python object type string for a common Python object, (e.g.: "<class 'dict'>")
+3. for `message.content.command`, `message.content.param`, and `message.content.response`
+   These three fields are reserved for plugin calls.
+   `command` is the plugin command name, `param` is the related parameters, and `response` is the response.
+   Set the `content_type` to "command" in this case.
 
 All of the above strings are case-sensitive.
+
+For example, when the message is delivering a plugin call command or plugin call response,
+the `content_type` and `content` should look like below:
+
+```yaml
+Message:
+  content_type: command
+  content:
+    command: <plugin command, exists in both calling and response>
+    param: <plugin call parameter, exists only in calling a command>
+    response: <plugin call response, exists only in a command response>
+```
 
 ### For "config.yaml"
 
@@ -348,11 +353,11 @@ class YourPlugin(AbstractPlugin):
         super(YourPlugin, self).__init__(config)
         # ...
 
-    def command(self, command_name: str, param: Dict, **kwargs) -> Dict:
+    def command(self, command_name: str, param: Any, **kwargs) -> Any:
         # ...
 ```
 
-Remember to implement its `command` method which receives a command name string and a parameter dict and returns its response in another dict.
+Remember to implement its `command` method which receives a command name string and a parameter (recommend to use a Python `dict`) and returns its response (also recommend to use a Python `dict`).
 
 The `command_name` makes it possible for a plugin to provide multiple commands,
 such as a disk plugin provides both the "read" and "write" command.
@@ -370,51 +375,112 @@ version: <version>
 type: plugin
 as_plugin: true
 
-info: # The basic information of the plugin. Must exist if `as_plugin` is `true`.
-  title: <title> # the title of the plugin
-  description: <description> # description of the plugin
-  description_for_human: <description_for_human> # optional, description for human to read
-  description_for_model: <description_for_model> # optional, description for LLMs to read
-  prompt: <optional_prompt> # if exists, it is the instruction to prompt LLMs
-  prompt_file_name: <optional_prompt_file_name> # if exists, it is the file located in the same folder of this "config.yaml" that contains the instructions to prompt LLMs
-  prompt_file_path: <optional_prompt_file_path> # if exists, it is the full file path that indicate the file contains the instructions to prompt LLMs
-commands: # API list that the plugin provided. Must exist if `as_plugin` is `true`.
+info: # The basic information of the plugin. This section must exist if `as_plugin` is `true`.
+  title: <title> # The title of the plugin
+  description: <description> # The description of the plugin
+  description_for_human: <description_for_human> # Optional. Description for human readers
+  description_for_model: <description_for_model> # Optional. Description for Large Language Models (LLMs) to read
+  prompt: <optional_prompt> # If exists, this is the instruction to prompt LLMs
+  prompt_file_name: <optional_prompt_file_name> # If exists, this is the name of the file located in the same folder as the "config.yaml" file that contains the instructions to prompt LLMs
+  prompt_file_path: <optional_prompt_file_path> # If exists, this is the full file path that indicates the file contains the instructions to prompt LLMs
+commands: # The list of APIs provided by the plugin. This section must exist if `as_plugin` is `true`.
   -
-    command_name: <command_name_1> # the name of the first API
-    description: <command_description_1> # the API description
-    parameters: # parameters that the API need to be passed
-      -
-        name: <param_name_1> # the name of the first parameter
-        type: string # the type of the first parameter
-        description: <description_1> # the parameter description
-        enum: # optional, entire possible values of this parameter
-          - <enum_1>
-          - <enum_2>
-        required: true # if true, the parameter must be provided when calling the API, and if false, the parameter is optional.
-        example: <example> # optional, an optional field gives an example of the parameter.
-      -
-        name: <param_name_2>
-        type: string
-        description: <description_2>
-        required: true
-        example: <example>
-    response: # fields in the API response
-      -
-        name: <response_field_name_1> # the name of the first response field
-        type: string # the type of the first response field
-        description: <response_field_description_1> # the response field description.
-        optional: false # if false, this response field will always be included in the response, and if true, this response field can be absent in the response.
-        example: <response_field_example_1> # an optional field gives an example of this response field.
-      -
-        name: <response_field_name_2>
-        type: string
-        description: <response_field_description_2>
-        optional: false
-        example: <response_field_example_2>
+    command_name: <command_name_1> # The name of the first API
+    description: <command_description_1> # The description of the API
+    parameter: # The `parameter` required by the API
+      type: # The type of the `parameter`, recommend to use a Python `Dict`
+            # Use the YAML mapping/object syntax to describe the `Dict` items.
+            # The YAML mapping/object syntax indicates that the type is a `Dict`,
+            # and each item in the YAML mapping/object describes one key-value pair in the `Dict`.
+            # The keys in the `Dict` are always string type, and their names are described as the YAML mapping/object keys.
+            # The type of the value for each key is described under that key using the parameter type description syntax.
+        <param_name_1>: # The name of the first parameter
+          type: string # The type of the first parameter
+          description: <description_1> # The description of this parameter
+          enum: # Optional. The entire possible values of this parameter
+            - <enum_1>
+            - <enum_2>
+          required: true # If true, the parameter must be provided when calling the API. If false, the parameter is optional. Defaults to true.
+          asset_ref_acceptable: false # If true, an `AssetRef` object (or URL) representing an `Asset` field with the acceptable data type can be passed instead of the real parameter object.
+                                      # The plugin will read the corresponding asset from the Copilot context in this case.
+                                      # If false, only the real parameter object is acceptable. No `AssetRef` should be passed to this parameter.
+                                      # This field defaults to false if not provided.
+          example: <example> # Optional. An example of the parameter.
+        <param_name_2>:
+          type: List # Set the type to `List` if the parameter is a list type and the list elements are simple.
+                     # It is better to attach the element type, e.g., `List[int]`.
+          description: <description_2>
+          required: true
+          example: <example>
+        <param_name_3>:
+          type: # Use the YAML list syntax to describe the list element object when the list element type is complex.
+                # The YAML list syntax indicates that the type is a `List`,
+                # and each element in the YAML list describes the key name and value type of one field in the list element object using the parameter type description syntax.
+                # Note the additional YAML `name` field that describes the key name.
+            -
+              name: <element_field_name1>
+              type: int
+              description: <element_field_description_1>
+              required: true
+              example: <example>
+            -
+              name: <element_field_name2>
+              type: string
+              description: <element_field_description_2>
+              required: true
+              example: <example>
+          description: <description_3>
+          required: true
+          example: <example>
+        <param_name_4>:
+          type: Dict # Set the type to `Dict` or `Mapping` if the keys and values are simple.
+                     # It is better to attach the key and value types, e.g., `Dict[str, int]`.
+                     # Please note that the `Dict` keys should always be in string type.
+          description: <description_4>
+          required: true
+          example: <example>
+        <param_name_5>:
+          type: # Use the YAML mapping/object syntax to describe the `Dict` items.
+                # Just like the type description of the `parameter` field
+            _type_ref: <type_ref_name> # Optional. A complex type can have a type reference that other parts of the YAML file can refer to for the entire type description.
+            <key_name_1>:
+              type: int
+              description: <value_description_1>
+              required: true
+              example: <example>
+            <key_name_2>:
+              type: string
+              description: <value_description_2>
+              required: true
+              example: <example>
+          description: <description_5>
+          required: true
+          example: <example>
+        <param_name_6>:
+          type: <type_ref_name> # Use the value of the `_type_ref` defined above to indicate that this parameter has the same type as the above parameter
+          description: <description_6>
+          required: false
+          example: <example>
+      description: <description_1> # An optional description.
+      required: true # An optional `required` field. Can be omitted because it defaults to true.
+      asset_ref_acceptable: false # This field can also appear here to indicate that an asset reference can be passed to represent the entire input parameter dictionary.
+    response: # The API response.
+      type:
+        <response_field_name_1>: # The name of the first response field
+          type: string # The type of the first response field
+          description: <response_field_description_1> # The description of the response field.
+          optional: false # If false, this response field will always be included in the response. If true, this response field can be absent in the response. Defaults to false.
+          example: <response_field_example_1> # Optional. An example of this response field.
+        <response_field_name_2>:
+          type: string
+          description: <response_field_description_2>
+          optional: false
+          example: <response_field_example_2>
   -
     command_name: <command_name_2>
     description: <command_description_2>
-    parameters: 
+    parameter:
+      type: string # Can also be a simple type.
       # ...
     response:
       # ...

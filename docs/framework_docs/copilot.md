@@ -54,7 +54,7 @@ class Copilot(AbstractPlugin):
         """
         pass
 
-    def command(self, command_name: str, param: Dict, **kwargs) -> Dict:
+    def command(self, command_name: str, param: Any, **kwargs) -> Any:
         """
         The Plugin command method.
 

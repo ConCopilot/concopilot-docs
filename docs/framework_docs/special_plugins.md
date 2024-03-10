@@ -116,13 +116,16 @@ Implement example: [CmdUserInterface](https://github.com/ConCopilot/concopilot/t
     <br>
     Make sure the `type` in the config file is set to "user_interface".
 
-- `def send_user_msg(self, msg: Message)`
+- `def send_msg_user(self, msg: Message)`
 
     Send a message to the user.
 
-- `def on_user_msg(self, msg: Message) -> Optional[Message]`
+- `def on_msg_user(self, msg: Message) -> Optional[Message]`
 
     Send a message to the user and wait the user response.
+
+    This method must return the exact response to the input `msg`.
+    Implementations may need to take special mechanism to guarantee this.
 
 - `def has_user_msg(self) -> bool`
 
@@ -156,9 +159,9 @@ Implement example: [BasicJsonMessageManager](https://github.com/ConCopilot/conco
     <br>
     Make sure the `type` in the config file is set to "message_manager".
 
-- `def parse(self, response: InteractResponse) -> Message`
+- `def parse(self, response: InteractResponse) -> List[Message]`
 
-    Parse the input `InteractResponse` object into a `Message` object.
+    Parse the input `InteractResponse` object into a `Message` object list.
     <br>
     Usually called by an interactor after receiving a cerebrum response.
 
@@ -196,7 +199,7 @@ Implement example: [BasicPluginManager](https://github.com/ConCopilot/concopilot
 
 - `plugin_id_map` property
 
-    Get the map (`Dict[Union[uuid.UUID, str], Plugin]`) of managed plugins arranged by the plugin id.
+    Get the map (`Dict[Union[uuid.UUID, str, int], Plugin]`) of managed plugins arranged by the plugin id.
 
 - `plugin_name_map` property
 
@@ -206,7 +209,7 @@ Implement example: [BasicPluginManager](https://github.com/ConCopilot/concopilot
 
     Add a new plugin to the plugin pool.
 
-- `def get_plugin(self, *, id: Union[uuid.UUID, str] = None, name: str = None) -> Optional[Plugin]`
+- `def get_plugin(self, *, id: Union[uuid.UUID, str, int] = None, name: str = None) -> Optional[Plugin]`
 
     Retrieve a plugin with its id and name.
 
