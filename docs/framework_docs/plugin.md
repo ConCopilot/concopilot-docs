@@ -73,7 +73,7 @@ The component version string.
 
 ###### `id` property
 
-The id of the plugin instance in `Union[uuid.UUID, str]`.
+The id of the plugin instance in `Union[uuid.UUID, str, int]`.
 
 ###### `name` property
 
@@ -99,7 +99,7 @@ Returns the plugin resource list (`List[Resource]`).
 
 ###### `resource_id_map` property
 
-Returns the plugin resource map (`Dict[Union[uuid.UUID, str], Resource]`) arranged by the resource id.
+Returns the plugin resource map (`Dict[Union[uuid.UUID, str, int], Resource]`) arranged by the resource id.
 
 ###### `resource_name_map` property
 
@@ -134,7 +134,7 @@ The plugin prompt can either be pre-defined in the plugins "config.yaml" or be g
 
 Methods in this group is mainly used to interact with other parts of the copilot, especially the `Interactor` and `Cerebrum` (LLM).
 
-##### `def command(self, command_name: str, param: Dict, **kwargs) -> Dict`
+##### `def command(self, command_name: str, param: Any, **kwargs) -> Any`
 
 This is the raw (without message encapsulation) plugin command execution interface.
 
@@ -143,7 +143,7 @@ Implement this method if the component is supposed to be a real full functional 
 This method accept 3 parameters:
 
 1. `command_name`: the command name to call.
-2. `param`: the command parameters.
+2. `param`: the command parameter (recommend to use a Python `dict`).
 3. `kwargs` reserved, not recommend to use.
 
 And returns the command execution result.
