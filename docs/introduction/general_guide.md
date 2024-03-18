@@ -113,6 +113,8 @@ InteractResponse:
   cost: the calling cost
 ```
 
+Learn more in [Cerebrum Interface](../framework_docs/cerebrum_interface.md).
+
 ### For Message creation
 
 Messages are used to transfer information and data between copilot, plugins, and users.
@@ -149,7 +151,8 @@ Thus, the contracts below are necessary:
 2. for `content_type`
     1. use Multipurpose Internet Mail Extensions type (MIME type) for common serialized `content` (e.g.: text/markdown)
     2. set to "command" if the `content` is a plugin call command or response
-    3. set to `content` Python object type string for a common Python object, (e.g.: "<class 'dict'>")
+    3. set to "asset_ref" if the `content` is an AssetRef object or an AssetRef URL
+    4. set to the Python object type string (`str(type(msg.content))`) for a common Python object `content`, (e.g.: `<class 'dict'>`)
 3. for `message.content.command`, `message.content.param`, and `message.content.response`
    These three fields are reserved for plugin calls.
    `command` is the plugin command name, `param` is the related parameters, and `response` is the response.
