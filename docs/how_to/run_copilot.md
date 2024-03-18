@@ -31,12 +31,16 @@ from concopilot import conpack
 # Download necessary configuration files,
 # install necessary pip packages,
 # then build and return the built component.
-component=conpack(['build', '--group-id=<group_id>', '--artifact-id=<artifact_id>', '--version=version'])
+component=conpack('build', '--group-id=<group_id>', '--artifact-id=<artifact_id>', '--version=version')
+# or
+component=conpack('build', group_id='<group_id>', artifact_id='<artifact_id>', version='version')
 
 # Run the copilot/agent described in config file <config_file_path>.
 # Skip all pip package installation check
 # Add current folder to Python path
-conpack(['run', '--config-file=<config_file_path>', '--skip-setup', '--add-current-folder-to-path'])
+conpack('run', '--config-file=<config_file_path>', '--skip-setup', '--add-current-folder-to-path')
+# or
+conpack('run', config_file='<config_file_path>', skip_setup=True, add_current_folder_to_path=True)
 ```
 
 The usage of `conpack` method in python is identical to the `conpack` CLI.
