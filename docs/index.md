@@ -18,6 +18,7 @@ ConCopilot defines standards and common interfaces that would be helpful to make
     - [Copilot](framework_docs/copilot.md)
     - [Plugin](framework_docs/plugin.md)
     - [Special Plugins](framework_docs/special_plugins.md)
+    - [Cerebrum Interface](framework_docs/cerebrum_interface.md)
     - [Message](framework_docs/message.md)
     - [Resource](framework_docs/resource.md)
     - [Assets](framework_docs/assets.md)

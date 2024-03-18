@@ -20,9 +20,9 @@ but can store data in any type and structure.
 ## Asset Meta (AssetMeta)
 
 An Asset Meta is a JSON object that describes the structure and data types of an asset.
-It has the same structure as an Asset, but all complex data types are replaced with their Python `__class__` string.
+It has the same structure as an Asset, but all complex data types are replaced with their Python type string (`str(type(obj))`).
 
-For example, if an asset stores an image and has the following structure:
+For example, let's say we have an asset that stores an image with the following structure:
 
 ```json
 {
@@ -58,10 +58,31 @@ Its corresponding asset meta will be:
 }
 ```
 
+Sometimes, LLMs may struggle to capture the hierarchical structure of the asset meta.
+In such cases, a flattened asset meta with type information of its sub-containers can be easier for LLMs to understand.
+Developers can use the `asset_ref_obj.flatten(sep='/', keep_container_type=True)` method to retrieve the flattened asset meta with container type information.
+
+For the example above, its flattened asset meta with container type information will be:
+
+```json
+{
+  "asset_type": "asset_example",
+  "asset_id": "<asset_id>",
+  "content_type": "<class 'dict'>",
+  "content": "<class 'dict'>",
+  "content/image": "<class 'numpy.ndarray'>",
+  "content/source_url": "<the_image_source_url>",
+  "content/labels": "<class 'list'>",
+  "content/labels/0": "<label_1>",
+  "content/labels/1": "<label_2>"
+}
+```
+
+Please note that the `"content": "<class 'dict'>"` and `"content.labels": "<class 'list'>"` are sub-container type information.
+
 In `Cerebrum` developments,
-it is recommended to provide an AssetMeta list that contains the meta information for each asset to the LLM,
-making it possible for the LLM to review the Asset Meta in each round of chat,
-and connect data in assets to the tasks and goals.
+it is recommended to provide a flattened AssetMeta list that contains the meta information for each asset to the LLM.
+This allows the LLM to review the Asset Meta in each round of chat and connect data in assets to the tasks and goals.
 
 ## Asset Reference (AssetRef)
 
@@ -140,7 +161,14 @@ The Asset Reference URL version:
 }
 ```
 
-### Using AssetRef in Message Contents
+### Using AssetRef in Message Contents Text
+
+Sometimes, it is needs to embed an asset object in a message text.
+For example, there might need to embed an image in a Markdown text.
+Use the asset reference to the object to achieve this.
+Both the JSON object version and Asset Reference URL version are acceptable.
+However, when embedding the asset reference into the message text, make sure to surround it with "<|" and "|>".
+This is necessary only in this case and is not required when passing AssetRef to Plugin Calls.
 
 Sometimes, it is needs to reference some asset object in a message.
 Use the asset reference to the object to achieve this.

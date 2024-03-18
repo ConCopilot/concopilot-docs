@@ -62,7 +62,7 @@ Source code: [interactor.py](https://github.com/ConCopilot/concopilot/blob/main/
 <br>
 Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/main/config/interactor/config.yaml)
 <br>
-Implement example: [AutoInteractor](https://github.com/ConCopilot/concopilot-examples/tree/main/concopilot_examples/interactor/auto)
+Implement example: [ChatWithToolInteractor](https://github.com/ConCopilot/concopilot-examples/tree/main/concopilot_examples/interactor/chatwithtool)
 
 ### Special methods
 
@@ -230,7 +230,7 @@ Source code: [promptgenerator.py](https://github.com/ConCopilot/concopilot/blob/
 <br>
 Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/main/config/plugin/promptgenerator/config.yaml) 
 <br>
-Implement example: [LanguageModelPluginPromptGenerator](https://github.com/ConCopilot/concopilot-examples/tree/main/concopilot_examples/plugin/promptgenerator)
+Implement example: [YamlPluginPromptGenerator](https://github.com/ConCopilot/concopilot-examples/tree/main/concopilot_examples/plugin/promptgenerator/yamlgen)
 
 ### Special methods
 
