@@ -9,7 +9,7 @@ This guide provides an overview about how to develop a plugin.
 
 ## Examples
 
-You can refer [these examples](https://github.com/ConCopilot/concopilot/blob/main/concopilot_examples/plugin) during developing.
+You can refer [these examples](https://github.com/ConCopilot/concopilot-examples/blob/v0.0.3/concopilot_examples/plugin) during developing.
 This folder contains several developed plugins, click into sub-folders for details.
 
 ## Create a package
@@ -32,7 +32,7 @@ Notes:
 
 1. The ".config" folder.
     1. Any file in this folder will be pushed to our component repository during deployment.
-    2. A "config.yaml" containing all information about this component is **REQUIRED**. A full template can be found [here](https://github.com/ConCopilot/concopilot/blob/main/config/plugin/config.yaml).
+    2. A "config.yaml" containing all information about this component is **REQUIRED**. A full template can be found [here](https://github.com/ConCopilot/concopilot/blob/v0.0.3/config/plugin/config.yaml).
     3. A "readme.md" to describe this component is **recommended**.
     4. Do **NOT** put anything too large (like a model weights file) here.
 2. The "\_\_init\_\_.py": expose a "constructor" method like below to make ConCopilot able to construct your plugin.
@@ -69,7 +69,7 @@ class YourPlugin(AbstractPlugin):
         super(YourPlugin, self).__init__(config)
         # ...
 
-    def command(self, command_name: str, param: Dict, **kwargs) -> Dict:
+    def command(self, command_name: str, param: Any, **kwargs) -> Any:
         # ...
 ```
 
@@ -100,58 +100,119 @@ version: <version>
 type: plugin
 as_plugin: true
 
-info: # The basic information of the plugin. Must exist if `as_plugin` is `true`.
-  title: <title> # the title of the plugin
-  description: <description> # description of the plugin
-  description_for_human: <description_for_human> # optional, description for human to read
-  description_for_model: <description_for_model> # optional, description for LLMs to read
-  prompt: <optional_prompt> # if exists, it is the instruction to prompt LLMs
-  prompt_file_name: <optional_prompt_file_name> # if exists, it is the file located in the same folder of this "config.yaml" that contains the instructions to prompt LLMs
-  prompt_file_path: <optional_prompt_file_path> # if exists, it is the full file path that indicate the file contains the instructions to prompt LLMs
-commands: # API list that the plugin provided. Must exist if `as_plugin` is `true`.
+info: # The basic information of the plugin. This section must exist if `as_plugin` is `true`.
+  title: <title> # The title of the plugin
+  description: <description> # The description of the plugin
+  description_for_human: <description_for_human> # Optional. Description for human readers
+  description_for_model: <description_for_model> # Optional. Description for Large Language Models (LLMs) to read
+  prompt: <optional_prompt> # If exists, this is the instruction to prompt LLMs
+  prompt_file_name: <optional_prompt_file_name> # If exists, this is the name of the file located in the same folder as the "config.yaml" file that contains the instructions to prompt LLMs
+  prompt_file_path: <optional_prompt_file_path> # If exists, this is the full file path that indicates the file contains the instructions to prompt LLMs
+commands: # The list of APIs provided by the plugin. This section must exist if `as_plugin` is `true`.
   -
-    command_name: <command_name_1> # the name of the first API
-    description: <command_description_1> # the API description
-    parameters: # parameters that the API need to be passed
-      -
-        name: <param_name_1> # the name of the first parameter
-        type: string # the type of the first parameter
-        description: <description_1> # the parameter description
-        enum: # optional, entire possible values of this parameter
-          - <enum_1>
-          - <enum_2>
-        required: true # if true, the parameter must be provided when calling the API, and if false, the parameter is optional.
-        example: <example> # optional, an optional field gives an example of the parameter.
-      -
-        name: <param_name_2>
-        type: string
-        description: <description_2>
-        required: true
-        example: <example>
-    response: # fields in the API response
-      -
-        name: <response_field_name_1> # the name of the first response field
-        type: string # the type of the first response field
-        description: <response_field_description_1> # the response field description.
-        optional: false # if false, this response field will always be included in the response, and if true, this response field can be absent in the response.
-        example: <response_field_example_1> # an optional field gives an example of this response field.
-      -
-        name: <response_field_name_2>
-        type: string
-        description: <response_field_description_2>
-        optional: false
-        example: <response_field_example_2>
+    command_name: <command_name_1> # The name of the first API
+    description: <command_description_1> # The description of the API
+    parameter: # The `parameter` required by the API
+      type: # The type of the `parameter`, recommend to use a Python `Dict`
+            # Use the YAML mapping/object syntax to describe the `Dict` items.
+            # The YAML mapping/object syntax indicates that the type is a `Dict`,
+            # and each item in the YAML mapping/object describes one key-value pair in the `Dict`.
+            # The keys in the `Dict` are always string type, and their names are described as the YAML mapping/object keys.
+            # The type of the value for each key is described under that key using the parameter type description syntax.
+        <param_name_1>: # The name of the first parameter
+          type: string # The type of the first parameter
+          description: <description_1> # The description of this parameter
+          enum: # Optional. The entire possible values of this parameter
+            - <enum_1>
+            - <enum_2>
+          required: true # If true, the parameter must be provided when calling the API. If false, the parameter is optional. Defaults to true.
+          asset_ref_acceptable: false # If true, an `AssetRef` object (or URL) representing an `Asset` field with the acceptable data type can be passed instead of the real parameter object.
+                                      # The plugin will read the corresponding asset from the Copilot context in this case.
+                                      # If false, only the real parameter object is acceptable. No `AssetRef` should be passed to this parameter.
+                                      # This field defaults to false if not provided.
+          example: <example> # Optional. An example of the parameter.
+        <param_name_2>:
+          type: List # Set the type to `List` if the parameter is a list type and the list elements are simple.
+                     # It is better to attach the element type, e.g., `List[int]`.
+          description: <description_2>
+          required: true
+          example: <example>
+        <param_name_3>:
+          type: # Use the YAML list syntax to describe the list element object when the list element type is complex.
+                # The YAML list syntax indicates that the type is a `List`,
+                # and each element in the YAML list describes the key name and value type of one field in the list element object using the parameter type description syntax.
+                # Note the additional YAML `name` field that describes the key name.
+            -
+              name: <element_field_name1>
+              type: int
+              description: <element_field_description_1>
+              required: true
+              example: <example>
+            -
+              name: <element_field_name2>
+              type: string
+              description: <element_field_description_2>
+              required: true
+              example: <example>
+          description: <description_3>
+          required: true
+          example: <example>
+        <param_name_4>:
+          type: Dict # Set the type to `Dict` or `Mapping` if the keys and values are simple.
+                     # It is better to attach the key and value types, e.g., `Dict[str, int]`.
+                     # Please note that the `Dict` keys should always be in string type.
+          description: <description_4>
+          required: true
+          example: <example>
+        <param_name_5>:
+          type: # Use the YAML mapping/object syntax to describe the `Dict` items.
+                # Just like the type description of the `parameter` field
+            _type_ref: <type_ref_name> # Optional. A complex type can have a type reference that other parts of the YAML file can refer to for the entire type description.
+            <key_name_1>:
+              type: int
+              description: <value_description_1>
+              required: true
+              example: <example>
+            <key_name_2>:
+              type: string
+              description: <value_description_2>
+              required: true
+              example: <example>
+          description: <description_5>
+          required: true
+          example: <example>
+        <param_name_6>:
+          type: <type_ref_name> # Use the value of the `_type_ref` defined above to indicate that this parameter has the same type as the above parameter
+          description: <description_6>
+          required: false
+          example: <example>
+      description: <description_1> # An optional description.
+      required: true # An optional `required` field. Can be omitted because it defaults to true.
+      asset_ref_acceptable: false # This field can also appear here to indicate that an asset reference can be passed to represent the entire input parameter dictionary.
+    response: # The API response.
+      type:
+        <response_field_name_1>: # The name of the first response field
+          type: string # The type of the first response field
+          description: <response_field_description_1> # The description of the response field.
+          optional: false # If false, this response field will always be included in the response. If true, this response field can be absent in the response. Defaults to false.
+          example: <response_field_example_1> # Optional. An example of this response field.
+        <response_field_name_2>:
+          type: string
+          description: <response_field_description_2>
+          optional: false
+          example: <response_field_example_2>
   -
     command_name: <command_name_2>
     description: <command_description_2>
-    parameters: 
+    parameter:
+      type: string # Can also be a simple type.
       # ...
     response:
       # ...
   # ...
 ```
 
-The `def command(self, command_name: str, param: Dict, **kwargs) -> Dict:` method which receives a command name string and a parameter dict and returns its response in another dict should be implemented strictly according to the `commands` section above.
+The `def command(self, command_name: str, param: Any, **kwargs) -> Any:` method which receives a command name string and a parameter dict and returns its response in another dict should be implemented strictly according to the `commands` section above.
 
 The `command_name` makes it possible for a plugin to provide multiple commands,
 and each command should receive its `param` and return its "response" with a format respectively according to the `parameters` and `response` sections under the item with the same `command_name` in the `commands` list.
@@ -362,7 +423,7 @@ After this step, you will find your components installed into your local reposit
 with the paths consisted of their `group_id`, `artifact_id`, and `version`.
 
 Now, you can use your plugin in any copilot by adding your plugin into the copilot's plugin list.
-For example, here is the "[config.yaml](https://github.com/ConCopilot/concopilot/blob/main/concopilot_examples/copilot/auto/.config/config.yaml)" of an AutoGPT like copilot/agent.
+For example, here is the "[config.yaml](https://github.com/ConCopilot/concopilot-examples/blob/v0.0.3/concopilot_examples/copilot/auto/.config/config.yaml)" of an AutoGPT like copilot/agent.
 Download this file,
 and you can add your plugin by adding your plugin's `group_id`, `artifact_id`,
 and `version` into the `plugin_manager.config.plugins` section in the file. 

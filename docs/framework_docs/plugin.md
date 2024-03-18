@@ -6,9 +6,9 @@
 
 ### Methods of the `Plugin` interface
 
-Source code: [plugin.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/plugin/plugin.py)
+Source code: [plugin.py](https://github.com/ConCopilot/concopilot/blob/v0.0.3/concopilot/framework/plugin/plugin.py)
 <br>
-Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.1/config/plugin/config.yaml)
+Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.3/config/plugin/config.yaml)
 
 The Plugin methods can be grouped into 3 parts: configuration, data & property, and interaction.
 
@@ -73,7 +73,7 @@ The component version string.
 
 ###### `id` property
 
-The id of the plugin instance in `Union[uuid.UUID, str]`.
+The id of the plugin instance in `Union[uuid.UUID, str, int]`.
 
 ###### `name` property
 
@@ -99,7 +99,7 @@ Returns the plugin resource list (`List[Resource]`).
 
 ###### `resource_id_map` property
 
-Returns the plugin resource map (`Dict[Union[uuid.UUID, str], Resource]`) arranged by the resource id.
+Returns the plugin resource map (`Dict[Union[uuid.UUID, str, int], Resource]`) arranged by the resource id.
 
 ###### `resource_name_map` property
 
@@ -134,7 +134,7 @@ The plugin prompt can either be pre-defined in the plugins "config.yaml" or be g
 
 Methods in this group is mainly used to interact with other parts of the copilot, especially the `Interactor` and `Cerebrum` (LLM).
 
-##### `def command(self, command_name: str, param: Dict, **kwargs) -> Dict`
+##### `def command(self, command_name: str, param: Any, **kwargs) -> Any`
 
 This is the raw (without message encapsulation) plugin command execution interface.
 
@@ -143,7 +143,7 @@ Implement this method if the component is supposed to be a real full functional 
 This method accept 3 parameters:
 
 1. `command_name`: the command name to call.
-2. `param`: the command parameters.
+2. `param`: the command parameter (recommend to use a Python `dict`).
 3. `kwargs` reserved, not recommend to use.
 
 And returns the command execution result.
@@ -175,7 +175,7 @@ Retrieve the first message this plugin is about to send or `None`.
 
 ## The `AbstractPlugin` class
 
-Source code: [plugin.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/plugin/plugin.py)
+Source code: [plugin.py](https://github.com/ConCopilot/concopilot/blob/v0.0.3/concopilot/framework/plugin/plugin.py)
 
 It looks very complex for the `Plugin` interface.
 Fortunately, ConCopilot has implemented most of the interface methods for common use.
@@ -191,4 +191,4 @@ Developers only need to do 2 things in most cases:
     This method will control the core logics of your plugin,
     so you need to implement it with your own logic.
 
-See more examples [here](https://github.com/ConCopilot/concopilot/tree/v0.0.1/concopilot_examples/plugin). 
+See more examples [here](https://github.com/ConCopilot/concopilot-examples/tree/v0.0.3/concopilot_examples/plugin).

@@ -20,6 +20,7 @@ ConCopilot defines standards and common interfaces that would be helpful to make
     - [Special Plugins](framework_docs/special_plugins.md)
     - [Message](framework_docs/message.md)
     - [Resource](framework_docs/resource.md)
+    - [Assets](framework_docs/assets.md)
 - [BUILD & DEPLOY](build_&_deploy/index.md):
     - [The `conpack` CLI](build_&_deploy/conpack.md)
     - [The `run` command](build_&_deploy/run.md)

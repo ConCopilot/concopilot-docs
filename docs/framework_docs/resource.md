@@ -1,8 +1,8 @@
 # Resource
 
-Source code: [resource.py](https://github.com/ConCopilot/concopilot/blob/v0.0.1/concopilot/framework/resource/resource.py)
+Source code: [resource.py](https://github.com/ConCopilot/concopilot/blob/v0.0.3/concopilot/framework/resource/resource.py)
 <br>
-Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.1/config/resource/category/model/config.yaml)
+Config file example: [config.yaml](https://github.com/ConCopilot/concopilot/blob/v0.0.3/config/resource/category/model/config.yaml)
 
 [TOC]
 
